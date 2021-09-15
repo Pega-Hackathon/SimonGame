@@ -1,0 +1,42 @@
+body {
+  text-align: center;
+  background-color: white;
+}
+
+#level-title {
+  font-size: 3rem;
+  margin:  5%;
+  color: #2b6279;
+}
+
+.container {
+  display: block;
+  width: 50%;
+}
+
+.row {
+  display: block;
+}
+
+.btn {
+  margin: 20px;
+  display: inline-block;
+  height: 200px;
+  width: 200px;
+  border: 10px solid black;
+  border-radius: 50%;
+}
+
+.btn:hover {
+border: 10px solid black;
+}
+
+.pressed {
+  box-shadow: 0 0 20px white;
+  background-color: grey;
+}
+
+.game-over {
+  background-color: red;
+  opacity: 0.8;
+}
