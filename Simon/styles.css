@@ -4,9 +4,9 @@ body {
 }
 
 #level-title {
-  font-size: 3rem;
+  font-size: 5rem;
   margin:  5%;
-  color: #2b6279;
+  color:black;
 }
 
 .container {
@@ -21,19 +21,14 @@ body {
 .btn {
   margin: 20px;
   display: inline-block;
-  height: 200px;
-  width: 200px;
+  height: 250px;
+  width: 250px;
   border: 10px solid black;
   border-radius: 50%;
 }
 
 .btn:hover {
-border: 10px solid black;
-}
-
-.pressed {
-  box-shadow: 0 0 20px white;
-  background-color: grey;
+border: 20px solid black;
 }
 
 .game-over {
