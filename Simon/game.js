@@ -4,18 +4,27 @@ const buttonColor = ["red", "blue", "green", "yellow"];
 let level = 0;  // store the game level
 let correctPattern = []; // randomly generated game patten
 let userClickedPattern = []; // user clicked patten
+let customPattern = [];
 let gameStart = false;
+let customGame = false;
+let updatingform = false;
 
-// making sure the user pressed any key from keybpard to start game
-document.addEventListener("keydown", event => {
-  // start game if its not already started
-  if(!gameStart) {
-    gameStart = true;
-    console.log("Game starts");
-    document.getElementById('game-status').innerHTML = "Level " + level;
-    GetNextColor();
-  }
-});
+// let form = document.querySelectorAll('.form-group'),
+//     submitInput = form[0].querySelector('input[type="submit"]');
+//
+// function getDataForm(e){
+//   e.preventDefault();
+//   let formData = new FormData(form[0]);
+//
+//   alert(formData.get('color0')+ ' '+ formData.get('color1'));
+// }
+//
+// document.addEventListener('DOMContentLoaded', function () {
+//   submitInput.addEventListener('click', getDataForm, false);
+// }, false);
+
+
+startGame();
 
 const onClick = function() {
   console.log(this.id);
@@ -34,18 +43,83 @@ document.getElementById('blue').onclick = onClick;
 document.getElementById('green').onclick = onClick;
 document.getElementById('yellow').onclick = onClick;
 
+
+function getdata() {
+  updatingform = true;
+}
+document.getElementById('submit').addEventListener("click", function() {
+
+  var color0 = document.getElementById('color0').value;
+  var color1 = document.getElementById('color1').value;
+  var color2 = document.getElementById('color2').value;
+  var color3 = document.getElementById('color3').value;
+  var color4 = document.getElementById('color4').value;
+
+  if( !( (color0 ||color1||color2||color3||color4) === "" ) ) {
+    if( !(color0 === "")){
+      customPattern.push(color0); // adding color to gamepatten array
+    }
+    if( !(color1 === "")){
+      customPattern.push(color1);
+    }
+    if( !(color2 === "")){
+      customPattern.push(color2);
+    }
+    if( !(color3 === "")){
+      customPattern.push(color3);
+    }
+    if( !(color4 === "")){
+      customPattern.push(color4);
+    }
+    updatingform = false;
+    customGame = true;
+    console.log(customPattern);
+  }
+  else {
+    updatingform = false;
+  }
+
+});
+
+function startGame (){
+  // making sure the user pressed any key from keybpard to start game
+  document.addEventListener("keydown", event => {
+    // start game if its not already started
+    if((!gameStart) && (!updatingform)) {
+      gameStart = true;
+      console.log("Game starts");
+      if(customGame){
+        document.getElementById('game-status').innerHTML = "Level " + level + " - Custom Pattern";
+        console.log("custome game starts")
+        getCustomColor()
+      }
+      else {
+        document.getElementById('game-status').innerHTML = "Level " + level + " - Random Pattern";
+        getNextColor();
+      }
+    }
+  });
+}
+
 // function to check if the user clicked pattern is same as actual computer generated pattern(correctPattern)
 function checkAnswer(currentLevel) {
   if (correctPattern[currentLevel] === userClickedPattern[currentLevel]) {
     if (userClickedPattern.length === correctPattern.length){
       setTimeout(function () {
-        GetNextColor(); // if pattern is correct, calling GetNextColor function
+        // getNextColor(); // if pattern is correct, calling getNextColor function
+        if(customGame) {
+          console.log("custome game starts")
+          getCustomColor()
+        }
+        else{
+          getNextColor();
+        }
       }, 1000);
     }
   } else {
     MakeSound("wrong"); // if pattern is worong, then play wrong.mp3 MakeSound
     document.body.classList.add("game-over"); // display game over by adding 'game-over'class from css
-    document.getElementById('title').innerHTML = "Game Over, Please Refresh The Browser";   // overwrite game over message as title
+    document.getElementById('title').innerHTML = "Game Over, Press Any Key To Start";   // overwrite game over message as title
 
     setTimeout(function () {
       document.body.classList.remove("game-over"); // remove 'game-over' class from title
@@ -59,15 +133,20 @@ function checkAnswer(currentLevel) {
 function startOver() {
   level = 0;
   correctPattern = [];
-  started = false;
+  userClickedPattern = []; // user clicked patten
+  customPattern = [];
+  let customGame = false;
+  let updatingform = false;
+  gameStart = false;
+  startGame();
 }
 
 // function that gets random color and added to correctPattern for guessing
 // reseting userclicke pattern
-function GetNextColor() {
+function getNextColor() {
   userClickedPattern = [];
   level++;
-  document.getElementById('game-status').innerHTML = "Level " + level;
+  document.getElementById('game-status').innerHTML = "Level " + level + " - Random Pattern";
   var randomNumber = Math.floor(Math.random() * 4); // generating random number between 0-4
   var randomChosenColour = buttonColor[randomNumber]; // pick the color based on random number generated
   correctPattern.push(randomChosenColour); // adding color to gamepatten array
@@ -89,10 +168,10 @@ const timer = ms => new Promise(res => setTimeout(res, ms))
 //function that loops through each color from computer generated list and animate with wait time
 async function flashCorrectPattern () { // We need to wrap the loop into an async function for this to work
   document.getElementById('title').innerHTML = "Watch for pattern";
-  for (var i = 0; i < correctPattern.length; i++) {
+  for (let i = 0; i < correctPattern.length; i++) {
     MakeSound(correctPattern[i]);
     $("#" + correctPattern[i]).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
-    await timer(2000); // then the created Promise can be awaited
+    await timer(1000); // then the created Promise can be awaited
   }
   document.getElementById('title').innerHTML = "GO";
 }
@@ -110,4 +189,23 @@ function animateOnClick(currentColor) {
 function MakeSound(buttonColor){
   let audio = new Audio("sounds/" + buttonColor + ".mp3");
   audio.play();
+}
+
+//customer game
+
+function getCustomColor() {
+  userClickedPattern = [];
+  level++;
+  document.getElementById('game-status').innerHTML = "Level " + level + " - Custom Pattern";
+  if(level-1 < customPattern.length ) {
+    console.log(customPattern[level-1]);
+    correctPattern.push(customPattern[level-1]); // adding color to gamepatten array
+    flashCorrectPattern(); // calling flash method to flash computer generated pattern
+  }
+  else {
+    document.getElementById('title').innerHTML = "You Won, Please Refresh The Browser";   // overwrite game over message as title
+    customGame = false;
+    startOver();
+  }
+
 }
