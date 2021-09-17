@@ -1,74 +1,70 @@
 console.log("hello"); // making sure the javascript file actually runs
 
 const buttonColor = ["red", "blue", "green", "yellow"];
-const redButton = document.getElementById('red').id;
-const blueButton = document.getElementById('blue').id;
-const greenButton = document.getElementById('green').id;
-const yellowButton = document.getElementById('yellow').id;
-const buttonID = [redButton, blueButton, greenButton, yellowButton];
-
-let level = 0;
-let correctPattern = [];
-let userClickedPattern = [];
+let level = 0;  // store the game level
+let correctPattern = []; // randomly generated game patten
+let userClickedPattern = []; // user clicked patten
 let gameStart = false;
-let userCanClick = false;
 
-// making sure the user pressed any key from keybpard to stard game
+// making sure the user pressed any key from keybpard to start game
 document.addEventListener("keydown", event => {
   // start game if its not already started
   if(!gameStart) {
     gameStart = true;
     console.log("Game starts");
     document.getElementById('game-status').innerHTML = "Level " + level;
-    nextSequence();
+    GetNextColor();
   }
 });
 
 const onClick = function() {
   console.log(this.id);
-  let userChoice = this.id  // set the button id to useChoice
+  let userChoice = this.id  // set the user clicked button id to useChoice
   userClickedPattern.push(userChoice);  // adding user clicked color to an userClickedPattern array
 
-  sound(userChoice);  // call sound function to play sound based on color
-  //animatePress(userChoice);
+  MakeSound(userChoice);  // call MakeSound function to play MakeSound based on color
+  //animateOnClick(userChoice);
   playRound(correctPattern);
-  //flashCorrectPattern()
-
-
   checkAnswer(userClickedPattern.length-1); // passing last user clicked answer
 }
+
+// getting id of each button when clicked by calling onClick function
 document.getElementById('red').onclick = onClick;
 document.getElementById('blue').onclick = onClick;
 document.getElementById('green').onclick = onClick;
 document.getElementById('yellow').onclick = onClick;
 
+// function to check if the user clicked pattern is same as actual computer generated pattern(correctPattern)
 function checkAnswer(currentLevel) {
   if (correctPattern[currentLevel] === userClickedPattern[currentLevel]) {
     if (userClickedPattern.length === correctPattern.length){
       setTimeout(function () {
-        nextSequence();
+        GetNextColor(); // if pattern is correct, calling GetNextColor function
       }, 1000);
     }
   } else {
-    sound("wrong");
-    document.body.classList.add("game-over");
-    document.getElementById('title').innerHTML = "Game Over, Please Refresh The Browser";
+    MakeSound("wrong"); // if pattern is worong, then play wrong.mp3 MakeSound
+    document.body.classList.add("game-over"); // display game over by adding 'game-over'class from css
+    document.getElementById('title').innerHTML = "Game Over, Please Refresh The Browser";   // overwrite game over message as title
 
     setTimeout(function () {
-      document.body.classList.remove("game-over");
+      document.body.classList.remove("game-over"); // remove 'game-over' class from title
     }, 200);
 
     startOver();
   }
 }
 
+// function to reset the game.
 function startOver() {
   level = 0;
   correctPattern = [];
   started = false;
 }
 
-function nextSequence() {
+// function that gets random color and added to correctPattern for guessing
+// reseting userclicke pattern
+function GetNextColor() {
   userClickedPattern = [];
   level++;
   document.getElementById('game-status').innerHTML = "Level " + level;
@@ -76,36 +72,33 @@ function nextSequence() {
   var randomChosenColour = buttonColor[randomNumber]; // pick the color based on random number generated
   correctPattern.push(randomChosenColour); // adding color to gamepatten array
 
-  flashCorrectPattern();
-
-
+  flashCorrectPattern(); // calling flash method to flash computer generated pattern
 }
 
 function playRound(correctPattern) {
   correctPattern.forEach((color, index) => {
-    console.log(correctPattern);
+//    console.log(correctPattern);
     setTimeout(() => {
-      animatePress(color);
+      animateOnClick(color);
     }, (index + 1) * 600);
   });
 }
 
-
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
+//function that loops through each color from computer generated list and animate with wait time
 async function flashCorrectPattern () { // We need to wrap the loop into an async function for this to work
   document.getElementById('title').innerHTML = "Watch for pattern";
   for (var i = 0; i < correctPattern.length; i++) {
-    sound(correctPattern[i]);
+    MakeSound(correctPattern[i]);
     $("#" + correctPattern[i]).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
-    console.log(i);
     await timer(2000); // then the created Promise can be awaited
   }
   document.getElementById('title').innerHTML = "GO";
 }
 
-
-function animatePress(currentColor) {
+// function to animate the button when user clicked by adding pressed css class styling
+function animateOnClick(currentColor) {
   document.getElementById(currentColor).classList.add(".pressed");
   setTimeout(function() {
     document.getElementById(currentColor).classList.remove("pressed");
@@ -113,8 +106,8 @@ function animatePress(currentColor) {
   return;
 }
 
-// function that takes button color and plays the sound based on the color
-function sound(buttonColor){
+// function that takes button color and plays the MakeSound based on the color
+function MakeSound(buttonColor){
   let audio = new Audio("sounds/" + buttonColor + ".mp3");
   audio.play();
 }
