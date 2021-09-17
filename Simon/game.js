@@ -19,7 +19,7 @@ document.addEventListener("keydown", event => {
   if(!gameStart) {
     gameStart = true;
     console.log("Game starts");
-    document.getElementById('title').innerHTML = "Level " + level;
+    document.getElementById('game-status').innerHTML = "Level " + level;
     nextSequence();
   }
 });
@@ -32,6 +32,8 @@ const onClick = function() {
   sound(userChoice);  // call sound function to play sound based on color
   //animatePress(userChoice);
   playRound(correctPattern);
+  //flashCorrectPattern()
+
 
   checkAnswer(userClickedPattern.length-1); // passing last user clicked answer
 }
@@ -69,15 +71,14 @@ function startOver() {
 function nextSequence() {
   userClickedPattern = [];
   level++;
-  document.getElementById('title').innerHTML = "Level " + level;
+  document.getElementById('game-status').innerHTML = "Level " + level;
   var randomNumber = Math.floor(Math.random() * 4); // generating random number between 0-4
   var randomChosenColour = buttonColor[randomNumber]; // pick the color based on random number generated
   correctPattern.push(randomChosenColour); // adding color to gamepatten array
 
-  $("#" + randomChosenColour).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
-  // let fadeButton = document.getElementById(randomChosenColour);
-  // fadeButton.fadeOut(100);
-  sound(randomChosenColour);
+  flashCorrectPattern();
+
+
 }
 
 function playRound(correctPattern) {
@@ -90,13 +91,27 @@ function playRound(correctPattern) {
 }
 
 
+const timer = ms => new Promise(res => setTimeout(res, ms))
+
+async function flashCorrectPattern () { // We need to wrap the loop into an async function for this to work
+  document.getElementById('title').innerHTML = "Watch for pattern";
+  for (var i = 0; i < correctPattern.length; i++) {
+    sound(correctPattern[i]);
+    $("#" + correctPattern[i]).fadeOut(100).fadeIn(100).fadeOut(100).fadeIn(100);
+    console.log(i);
+    await timer(2000); // then the created Promise can be awaited
+  }
+  document.getElementById('title').innerHTML = "GO";
+}
+
+
 function animatePress(currentColor) {
   document.getElementById(currentColor).classList.add(".pressed");
   setTimeout(function() {
     document.getElementById(currentColor).classList.remove("pressed");
   }, 100);
+  return;
 }
-
 
 // function that takes button color and plays the sound based on the color
 function sound(buttonColor){
