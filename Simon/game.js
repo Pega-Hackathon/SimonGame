@@ -9,21 +9,6 @@ let gameStart = false;
 let customGame = false;
 let updatingform = false;
 
-// let form = document.querySelectorAll('.form-group'),
-//     submitInput = form[0].querySelector('input[type="submit"]');
-//
-// function getDataForm(e){
-//   e.preventDefault();
-//   let formData = new FormData(form[0]);
-//
-//   alert(formData.get('color0')+ ' '+ formData.get('color1'));
-// }
-//
-// document.addEventListener('DOMContentLoaded', function () {
-//   submitInput.addEventListener('click', getDataForm, false);
-// }, false);
-
-
 startGame();
 
 const onClick = function() {
@@ -55,6 +40,8 @@ document.getElementById('submit').addEventListener("click", function() {
   var color3 = document.getElementById('color3').value;
   var color4 = document.getElementById('color4').value;
 
+  //checking if the form fields are empty
+  // ignore the fields that empty and add color that array that exists
   if( !( (color0 ||color1||color2||color3||color4) === "" ) ) {
     if( !(color0 === "")){
       customPattern.push(color0); // adding color to gamepatten array
@@ -149,7 +136,7 @@ function getNextColor() {
   document.getElementById('game-status').innerHTML = "Level " + level + " - Random Pattern";
   var randomNumber = Math.floor(Math.random() * 4); // generating random number between 0-4
   var randomChosenColour = buttonColor[randomNumber]; // pick the color based on random number generated
-  correctPattern.push(randomChosenColour); // adding color to gamepatten array
+  correctPattern.push(randomChosenColour); // adding color to correctpatten array
 
   flashCorrectPattern(); // calling flash method to flash computer generated pattern
 }
@@ -193,13 +180,14 @@ function MakeSound(buttonColor){
 
 //customer game
 
+// if user is playing custom game, use this function
 function getCustomColor() {
   userClickedPattern = [];
   level++;
   document.getElementById('game-status').innerHTML = "Level " + level + " - Custom Pattern";
   if(level-1 < customPattern.length ) {
     console.log(customPattern[level-1]);
-    correctPattern.push(customPattern[level-1]); // adding color to gamepatten array
+    correctPattern.push(customPattern[level-1]); // adding color to correctpatten array
     flashCorrectPattern(); // calling flash method to flash computer generated pattern
   }
   else {
