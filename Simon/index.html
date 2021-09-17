@@ -1,35 +1,97 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Simon Game</title>
 
-    <!-- CSS style sheet -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
-    <link rel="stylesheet" href="styles.css">
+<head>
+  <meta charset="utf-8">
+  <title>Simon Game</title>
 
-    <!-- Bootstrap Scripts -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <!-- CSS style sheet -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Bootstrap Scripts -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 
-  </head>
-  <body>
-    <h1 id="title"> Press Any Key To Start</h1>
-    <h2 id="game-status"></h2>
-    <div class="container">
-      <div class="row">
-        <button type="button" id="red" class="btn red btn-danger btn-lg" ></button>
-        <button type="button" id="green" class="btn green btn-success btn-lg" ></button>
-      </div>
-      <div class="row">
-        <button type="button" id="yellow" class="btn yellow btn-warning btn-lg" ></button>
-        <button type="button" id="blue" class="btn blue btn-primary btn-lg"></button>
+</head>
+
+<body>
+
+  <section id="navigation">
+    <div class="container-fluid">
+
+      <!-- Top Navigation Bar -->
+      <nav class="navbar navbar-expand-lg navbar-light">
+
+        <a class="navbar-brand" href=""> Simon Game</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <!-- <a class="nav-link" href="#custome-pattern">Add Custom Pattern</a> -->
+              <a href="#customPatternForm" class="edit" title="form" data-toggle="modal" onclick="getdata()" > Add Custom Pattern </a>
+            </li>
+          </ul>
+        </div>
+
+      </nav>
+    </div>
+
+    <!-- signup Modal HTML -->
+    <div id="customPatternForm" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form class="form">
+            <div class="modal-header">
+              <h4 class="modal-title">Enter Custom Patterns</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>Enter First Color</label>
+                <input type="text" id="color0" class="form-control" required>
+                <label>Enter Second Color</label>
+                <input type="text" id="color1" class="form-control" required>
+                <label>Enter Third Color</label>
+                <input type="text" id="color2" class="form-control" required>
+                <label>Enter Fourth Color</label>
+                <input type="text" id="color3" class="form-control" required>
+                <label>Enter Fifth Color</label>
+                <input type="text" id="color4" class="form-control" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="button" class="btn btn-danger" data-dismiss="modal" value="Cancel">
+              <input type="submit" class="btn btn-success" data-dismiss="modal" value="Add Custom Pattern" id="submit">
+            </div>
+          </form>
+        </div>
       </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="game.js" charset="utf-8"></script>
-  </body>
+  </section>
+
+
+  <h1 id="title"> Press Any Key To Start</h1>
+  <h2 id="game-status"></h2>
+  <div class="container">
+    <div class="row">
+      <button type="button" id="red" class="btn red btn-danger btn-lg panel"></button>
+      <button type="button" id="green" class="btn green btn-success btn-lg panel"></button>
+    </div>
+    <div class="row">
+      <button type="button" id="yellow" class="btn yellow btn-warning btn-lg panel"></button>
+      <button type="button" id="blue" class="btn blue btn-primary btn-lg panel"></button>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="game.js" charset="utf-8"></script>
+</body>
+
 </html>
